@@ -15,8 +15,6 @@ namespace ButterAchievements
         {
             base.OnSubModuleLoad();
 
-            FileLog.Log($"[{DateTimeOffset.Now:g}] Reached {nameof(OnSubModuleLoad)} for {HarmonyId}");
-
             _harmony.Value.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
