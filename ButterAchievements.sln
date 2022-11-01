@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32708.82
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ButterAchievements", "src\ButterAchievements.csproj", "{43B001F5-BDF0-4C49-BB99-369E594459AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43B001F5-BDF0-4C49-BB99-369E594459AA}.Debug|x64.ActiveCfg = Debug|x64
+		{43B001F5-BDF0-4C49-BB99-369E594459AA}.Debug|x64.Build.0 = Debug|x64
+		{43B001F5-BDF0-4C49-BB99-369E594459AA}.Release|x64.ActiveCfg = Release|x64
+		{43B001F5-BDF0-4C49-BB99-369E594459AA}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4478E63-A1F9-4771-BD3E-4299CFCD0D44}
+	EndGlobalSection
+EndGlobal

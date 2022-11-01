@@ -1,0 +1,54 @@
+name: Build mod
+on:
+  workflow_dispatch: 
+
+jobs:
+  build_submodule:
+    runs-on: windows-latest
+    steps:
+    - name: Setup repo
+      uses: actions/checkout@v2
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+    - run: cd $GITHUB_WORKSPACE
+    - name: Download Bannerlord dependencies
+      run: Invoke-WebRequest -Uri ${{ secrets.BANNERLORD_ASSETS_URL }} -OutFile bannerlord.zip
+    - name: Unpack Bannerlord dependencies
+      run: Expand-Archive bannerlord.zip -DestinationPath bannerlord\
+    - name: Get GameFolder path
+      run: |
+        $gamefolder = Resolve-Path ./bannerlord
+        echo "gamefolder=$gamefolder" | Out-File -FilePath $env:GITHUB_ENV -Append
+    - name: Build
+      run: |
+        MsBuild.exe -noLogo -r -p:Configuration=Release -p:GameFolder="${env:gamefolder}"
+    - name: Upload assets
+      uses: actions/upload-artifact@v3
+      with:
+        name: SkipSplashVideos_Mod
+        if-no-files-found: error
+        path: |
+          bannerlord/Modules/
+          !bannerlord/Modules/Native
+          !bannerlord/Modules/SandBox
+          !bannerlord/Modules/StoryMode
+        
+  build_mod:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: sudo apt update && sudo apt install ffmpeg -y
+    - name: Generate assets
+      run: ./scripts/generate.sh
+    - name: Upload assets
+      uses: actions/upload-artifact@v3
+      with:
+        name: SkipSplashVideos_Files
+        if-no-files-found: error
+        path: |
+          *
+          !.git*
+          !scripts
+          !src
+          !*.sln
