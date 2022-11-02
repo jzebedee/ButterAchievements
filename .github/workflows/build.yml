@@ -25,30 +25,10 @@ jobs:
     - name: Upload assets
       uses: actions/upload-artifact@v3
       with:
-        name: SkipSplashVideos_Mod
+        name: ButterAchievements
         if-no-files-found: error
         path: |
           bannerlord/Modules/
           !bannerlord/Modules/Native
           !bannerlord/Modules/SandBox
           !bannerlord/Modules/StoryMode
-        
-  build_mod:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: sudo apt update && sudo apt install ffmpeg -y
-    - name: Generate assets
-      run: ./scripts/generate.sh
-    - name: Upload assets
-      uses: actions/upload-artifact@v3
-      with:
-        name: SkipSplashVideos_Files
-        if-no-files-found: error
-        path: |
-          *
-          !.git*
-          !scripts
-          !src
-          !*.sln
