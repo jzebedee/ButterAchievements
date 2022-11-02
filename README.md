@@ -1,5 +1,7 @@
 # Butter Achievements
 
+![butter_achievements](https://user-images.githubusercontent.com/1896945/199608500-616d1831-2d1a-4fc8-bbd4-ac241acdae07.png)
+
 Butter Achievements is a free and easy achievement enabler / unlocker / unblocker for Mount & Blade II: Bannerlord.
 
 ## Features
