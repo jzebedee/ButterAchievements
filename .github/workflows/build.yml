@@ -10,13 +10,9 @@ jobs:
       uses: actions/checkout@v2
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
-    - run: cd $GITHUB_WORKSPACE
-    - name: Download Bannerlord dependencies
-      run: Invoke-WebRequest -Uri ${{ secrets.BANNERLORD_ASSETS_URL }} -OutFile bannerlord.zip
-    - name: Unpack Bannerlord dependencies
-      run: Expand-Archive bannerlord.zip -DestinationPath bannerlord\
     - name: Get GameFolder path
       run: |
+        mkdir ./bannerlord
         $gamefolder = Resolve-Path ./bannerlord
         echo "gamefolder=$gamefolder" | Out-File -FilePath $env:GITHUB_ENV -Append
     - name: Build
