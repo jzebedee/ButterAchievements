@@ -16,12 +16,6 @@ public class SuppressCheatIntegrityPatch
      * [SaveableProperty(83)]
      * public bool EnabledCheatsBefore { get; set; }
      */
-    public static bool Prepare()
-    {
-        var version = KnownVersions.CurrentVersion;
-        return version >= KnownVersions.v1_2_7;
-    }
-
     public static bool Prefix(ref bool __result)
     {
         //suppress cheat usage
