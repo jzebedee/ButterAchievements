@@ -5,32 +5,36 @@ using TaleWorlds.MountAndBlade;
 
 namespace ButterAchievements;
 
-    public class SubModule : MBSubModuleBase
+public class SubModule : MBSubModuleBase
+{
+    private const string HarmonyId = $"{nameof(ButterAchievements)}.harmony";
+
+    private readonly Lazy<Harmony> _harmony = new(() => new Harmony(HarmonyId));
+
+    protected override void OnSubModuleLoad()
     {
-        private const string HarmonyId = $"{nameof(ButterAchievements)}.harmony";
+        base.OnSubModuleLoad();
 
-        private readonly Lazy<Harmony> _harmony = new(() => new Harmony(HarmonyId));
+        //EnableAchievementsPatch:
+        // 1. re-enables achievements in previously tainted savefiles
+        // 2. activates achievements even if mods or cheat mode is present
 
-        protected override void OnSubModuleLoad()
-        {
-            base.OnSubModuleLoad();
+        //EnableSandboxAchievementsPatch:
+        // 1. loads the achievements behavior in Sandbox mode games
 
-            //EnableAchievementsPatch:
-            // 1. re-enables achievements in previously tainted savefiles
-            // 2. activates achievements even if mods or cheat mode is present
+        //SwallowStoryModeAchievementsDuringSandboxPatch:
+        // 1. prevents game from crashing while registering Story mode achievements that Sandbox doesn't have
 
-            //EnableSandboxAchievementsPatch:
-            // 1. loads the achievements behavior in Sandbox mode games
+        //SuppressModulesPatch:
+        // 1. hides non-official mods from the module list, so that tainted saves can be used in vanilla and after using this mod
 
-            //SwallowStoryModeAchievementsDuringSandboxPatch:
-            // 1. prevents game from crashing while registering Story mode achievements that Sandbox doesn't have
-
-            //SuppressModulesPatch:
-            // 1. hides non-official mods from the module list, so that tainted saves can be used in vanilla and after using this mod
+        //SuppressCheatIntegrityPatch:
+        // 1. re-enables achievements in previously tainted savefiles (from cheating)
+        // 2. passes cheat integrity check even if cheat mode is present
 
         //SuppressUsedVersionsPatch
         // 1. hides past used versions, so that version downgrades don't taint the save
 
-            _harmony.Value.PatchAll(Assembly.GetExecutingAssembly());
-        }
+        _harmony.Value.PatchAll(Assembly.GetExecutingAssembly());
     }
+}
