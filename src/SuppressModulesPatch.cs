@@ -3,22 +3,31 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Library;
 
 namespace ButterAchievements;
+using static KnownVersions;
 
 [HarmonyPatch]
-public static class SuppressModulesPatch
+public static partial class SuppressModulesPatch
 {
-    private static class KnownVersions
+    public static bool Prepare()
     {
-        public static ApplicationVersion v1_1_0 => new ApplicationVersion(ApplicationVersionType.Release, 1, 1, 0, 0);
+        var version = CurrentVersion;
+
+        //only enable this on pre-1.2.7 games
+        //post-1.2.7 uses the DumpIntegrityCampaignBehavior to check this
+        if (version < KnownVersions.v1_2_7)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public static MethodBase TargetMethod()
     {
-        var version = TaleWorlds.Library.ApplicationVersion.FromParametersFile();
-        if(version < KnownVersions.v1_1_0)
+        var version = CurrentVersion;
+        if (version < KnownVersions.v1_1_0)
         {
             //TaleWorlds.CampaignSystem.Campaign.DetermineModules() : void @06000277
             //// Token: 0x06000277 RID: 631 RVA: 0x000110C8 File Offset: 0x0000F2C8
