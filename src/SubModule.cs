@@ -3,8 +3,8 @@ using System;
 using System.Reflection;
 using TaleWorlds.MountAndBlade;
 
-namespace ButterAchievements
-{
+namespace ButterAchievements;
+
     public class SubModule : MBSubModuleBase
     {
         private const string HarmonyId = $"{nameof(ButterAchievements)}.harmony";
@@ -31,4 +31,3 @@ namespace ButterAchievements
             _harmony.Value.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
-}
