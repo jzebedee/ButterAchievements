@@ -28,6 +28,9 @@ namespace ButterAchievements;
             //SuppressModulesPatch:
             // 1. hides non-official mods from the module list, so that tainted saves can be used in vanilla and after using this mod
 
+        //SuppressUsedVersionsPatch
+        // 1. hides past used versions, so that version downgrades don't taint the save
+
             _harmony.Value.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
