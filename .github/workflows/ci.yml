@@ -25,6 +25,6 @@ jobs:
         if-no-files-found: error
         path: |
           ${{ env.GAMEFOLDER }}/Modules/
-          !${{ env.GAMEFOLDER }}bannerlord/Modules/Native
-          !${{ env.GAMEFOLDER }}bannerlord/Modules/SandBox
-          !${{ env.GAMEFOLDER }}bannerlord/Modules/StoryMode
+          !${{ env.GAMEFOLDER }}/Modules/Native
+          !${{ env.GAMEFOLDER }}/Modules/SandBox
+          !${{ env.GAMEFOLDER }}/Modules/StoryMode
