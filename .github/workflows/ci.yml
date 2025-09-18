@@ -2,18 +2,22 @@ name: Build mod
 on:
   workflow_dispatch: 
 
+env:
+  GAMEFOLDER: ./bannerlord    
+
 jobs:
   build_submodule:
     runs-on: ubuntu-latest
     steps:
     - name: Setup repo
       uses: actions/checkout@v5
-    - name: Get GameFolder path
+    - name: Set GameFolder absolute path
       run: |
-        mkdir -p ./bannerlord
-        echo "gamefolder=./bannerlord" >> $GITHUB_ENV
+        echo "gamefolder=$(realpath $GAMEFOLDER)" >> $GITHUB_ENV
+    - name: Ensure GameFolder path exists
+      run: mkdir -p "$GAMEFOLDER"
     - name: Build
-      run: dotnet build -c Release -p:GameFolder="$gamefolder"
+      run: dotnet build -c Release "-p:GameFolder=$GAMEFOLDER"
     - name: Upload assets
       uses: actions/upload-artifact@v4
       with:
