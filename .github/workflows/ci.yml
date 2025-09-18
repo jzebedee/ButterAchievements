@@ -17,7 +17,7 @@ jobs:
     - name: Ensure GameFolder path exists
       run: mkdir -p "$GAMEFOLDER"
     - name: Build
-      run: dotnet build -c Release "-p:GameFolder=$GAMEFOLDER"
+      run: dotnet build -c Release "-p:GameFolder=$GAMEFOLDER" src/
     - name: Upload assets
       uses: actions/upload-artifact@v4
       with:
