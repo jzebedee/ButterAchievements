@@ -4,20 +4,18 @@ on:
 
 jobs:
   build_submodule:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Setup repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v5
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.1
+      uses: microsoft/setup-msbuild@v2
     - name: Get GameFolder path
       run: |
-        mkdir ./bannerlord
-        $gamefolder = Resolve-Path ./bannerlord
-        echo "gamefolder=$gamefolder" | Out-File -FilePath $env:GITHUB_ENV -Append
+        mkdir -p ./bannerlord
+        echo "gamefolder=./bannerlord" >> $GITHUB_ENV
     - name: Build
-      run: |
-        MsBuild.exe -noLogo -r -p:Configuration=Release -p:GameFolder="${env:gamefolder}" -p:DebugType=None
+      run: dotnet build -c Release -p:GameFolder="$gamefolder"
     - name: Upload assets
       uses: actions/upload-artifact@v3
       with:
