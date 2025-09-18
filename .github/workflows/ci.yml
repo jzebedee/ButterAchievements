@@ -1,6 +1,7 @@
 name: Build mod
 on:
   workflow_dispatch: 
+  push:
 
 env:
   GAMEFOLDER: ./bannerlord    

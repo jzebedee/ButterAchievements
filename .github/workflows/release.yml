@@ -1,0 +1,67 @@
+name: Create Release from Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Find CI workflow run
+      id: find_run
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const tag = context.ref.replace('refs/tags/', '');
+          // Find the workflow runs for the current commit
+          const runs = await github.rest.actions.listWorkflowRunsForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            event: 'push',
+            per_page: 50,
+          });
+          // Try to find a run that has an artifact named 'ButterAchievements' for the same commit
+          let matched = runs.data.workflow_runs.find(r => r.head_sha === context.sha);
+          if (!matched && runs.data.workflow_runs.length > 0) matched = runs.data.workflow_runs[0];
+          if (!matched) {
+            core.setFailed('No workflow run found to download artifact from');
+          }
+          return { run_id: matched.id };
+
+    - name: Download artifact from CI
+      uses: actions/download-artifact@v4
+      with:
+        name: ButterAchievements
+        path: ./artifact
+        # must use the run_id from the found run
+        # download-artifact action supports 'workflow_run_id' input only in some versions; use REST API fallback if needed
+      env:
+        RUN_ID: ${{ steps.find_run.outputs.run_id }}
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{ github.ref }}
+        body: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload artifact to release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./artifact/**
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
