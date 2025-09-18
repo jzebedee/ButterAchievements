@@ -24,7 +24,7 @@ jobs:
         name: ButterAchievements
         if-no-files-found: error
         path: |
-          bannerlord/Modules/
-          !bannerlord/Modules/Native
-          !bannerlord/Modules/SandBox
-          !bannerlord/Modules/StoryMode
+          ${{ env.GAMEFOLDER }}/Modules/
+          !${{ env.GAMEFOLDER }}bannerlord/Modules/Native
+          !${{ env.GAMEFOLDER }}bannerlord/Modules/SandBox
+          !${{ env.GAMEFOLDER }}bannerlord/Modules/StoryMode
