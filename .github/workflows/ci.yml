@@ -17,7 +17,7 @@ jobs:
     - name: Build
       run: dotnet build -c Release -p:GameFolder="$gamefolder"
     - name: Upload assets
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ButterAchievements
         if-no-files-found: error
