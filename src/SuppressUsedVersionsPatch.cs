@@ -5,7 +5,7 @@ using TaleWorlds.Core;
 
 namespace ButterAchievements;
 
-[HarmonyPatch(typeof(Campaign), "DeterminedSavedStats")]
+[HarmonyPatch(typeof(Campaign), "DetermineSavedStats")]
 public static class SuppressUsedVersionsPatch
 {
     public static void Postfix(ref List<string> ____usedGameVersions)
