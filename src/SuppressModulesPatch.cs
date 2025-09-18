@@ -10,8 +10,6 @@ namespace ButterAchievements;
 [HarmonyPatch(typeof(Campaign), "DetermineSavedStats")]
 public static class SuppressModulesPatch
 {
-    //private static readonly HashSet<string> _allowedModules = [.. ModuleHelper.GetOfficialModuleIds()];
-
     private static readonly string _allowedModulesSlug = string.Join(MBSaveLoad.ModuleCodeSeperator.ToString(),
         ModuleHelper.GetOfficialModuleIds()
           .Select(moduleId => $"{moduleId}{MBSaveLoad.ModuleVersionSeperator}v0.0.0.0"));
@@ -20,6 +18,5 @@ public static class SuppressModulesPatch
     {
         ____previouslyUsedModules.Clear();
         ____previouslyUsedModules.Add(_allowedModulesSlug);
-        //____previouslyUsedModules.RemoveAll(pum => !_allowedModules.Contains(pum));
     }
 }
