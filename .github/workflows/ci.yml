@@ -49,8 +49,9 @@ jobs:
         # Extract tag name from refs/tags/<tag>
         TAG_NAME="${GITHUB_REF#refs/tags/}"
         ZIP_NAME="ButterAchievements-${TAG_NAME}.zip"
+        ZIP_NAME="$(realpath $ZIP_NAME)"
         # Create a zip of the downloaded artifact directory
-        zip -r "$ZIP_NAME" ./artifact
+        (cd ./artifact && zip -r "$ZIP_NAME" .)
         # Persist the zip name for subsequent steps
         echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
 
