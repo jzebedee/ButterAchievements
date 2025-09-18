@@ -1,28 +1,25 @@
 ﻿using HarmonyLib;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
+using TaleWorlds.ModuleManager;
 
 namespace ButterAchievements;
 
-//TaleWorlds.CampaignSystem.Campaign.DeterminedSavedStats(Campaign.GameLoadingType) : void @06000280
-// Token: 0x06000280 RID: 640 RVA: 0x000119D4 File Offset: 0x0000FBD4
-[HarmonyPatch(typeof(Campaign), "DeterminedSavedStats")]
+[HarmonyPatch(typeof(Campaign), "DetermineSavedStats")]
 public static class SuppressModulesPatch
 {
-    //StoryMode.GameComponents.CampaignBehaviors.AchievementsCampaignBehavior.CheckIfModulesAreDefault() : bool @06000410
-    // Token: 0x06000410 RID: 1040 RVA: 0x00018BA0 File Offset: 0x00016DA0/
-    private static readonly HashSet<string> _allowedModules = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "Native",
-        "SandBoxCore",
-        "CustomBattle",
-        "SandBox",
-        "Multiplayer",
-        "BirthAndDeath",
-        "StoryMode"
-    };
+    //private static readonly HashSet<string> _allowedModules = [.. ModuleHelper.GetOfficialModuleIds()];
+
+    private static readonly string _allowedModulesSlug = string.Join(MBSaveLoad.ModuleCodeSeperator.ToString(),
+        ModuleHelper.GetOfficialModuleIds()
+          .Select(moduleId => $"{moduleId}{MBSaveLoad.ModuleVersionSeperator}v0.0.0.0"));
 
     public static void Postfix(ref List<string> ____previouslyUsedModules)
-        => ____previouslyUsedModules.RemoveAll(x => !_allowedModules.Contains(x));
+    {
+        ____previouslyUsedModules.Clear();
+        ____previouslyUsedModules.Add(_allowedModulesSlug);
+        //____previouslyUsedModules.RemoveAll(pum => !_allowedModules.Contains(pum));
+    }
 }
