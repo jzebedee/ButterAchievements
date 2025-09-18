@@ -4,7 +4,8 @@ on:
   push:
 
 env:
-  GAMEFOLDER: ./bannerlord    
+  GAMEFOLDER: ./bannerlord
+  ARTIFACT_NAME: ButterAchievements
 
 jobs:
   build_submodule:
@@ -22,10 +23,40 @@ jobs:
     - name: Upload assets
       uses: actions/upload-artifact@v4
       with:
-        name: ButterAchievements
+        name: ${{ env.ARTIFACT_NAME }}
         if-no-files-found: error
         path: |
           ${{ env.GAMEFOLDER }}/Modules/
           !${{ env.GAMEFOLDER }}/Modules/Native
           !${{ env.GAMEFOLDER }}/Modules/SandBox
           !${{ env.GAMEFOLDER }}/Modules/StoryMode
+  publish_release:
+    needs: build_submodule
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v5
+
+    - name: Download build artifact
+      uses: actions/download-artifact@v5
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ./artifact
+
+    - name: Prepare release asset (zip)
+      run: |
+        # Extract tag name from refs/tags/<tag>
+        TAG_NAME="${GITHUB_REF#refs/tags/}"
+        ZIP_NAME="ButterAchievements-${TAG_NAME}.zip"
+        # Create a zip of the downloaded artifact directory
+        zip -r "$ZIP_NAME" ./artifact
+        # Persist the zip name for subsequent steps
+        echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+
+    - name: Create GitHub release and upload asset
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ env.ZIP_NAME }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
