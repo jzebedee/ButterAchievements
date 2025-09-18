@@ -8,8 +8,6 @@ jobs:
     steps:
     - name: Setup repo
       uses: actions/checkout@v5
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
     - name: Get GameFolder path
       run: |
         mkdir -p ./bannerlord
