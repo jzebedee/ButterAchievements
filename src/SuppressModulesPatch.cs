@@ -35,19 +35,31 @@ public static class SuppressModulesPatch
         var modules = slug.Split(MBSaveLoad.ModuleCodeSeperator);
         foreach (var module in modules)
         {
-            if (module.Split(MBSaveLoad.ModuleVersionSeperator) is not [string moduleId, string moduleVersion])
+            if (IsAllowedModule(module, out var def))
             {
-                continue;
+                yield return def;
+            }
+        }
+
+        static bool IsAllowedModule(string s, out ModuleDef def)
+        {
+            var moduleSegments = s.Split(MBSaveLoad.ModuleVersionSeperator);
+            if (moduleSegments is not { Length: 2 }) // is not [string moduleId, string moduleVersion])
+            {
+                def = default;
+                return false;
             }
 
-            if (!_allowedModuleIds.Contains(moduleId))
-            {
-                continue;
-            }
+            var moduleId = moduleSegments[0];
+            var moduleVersion = moduleSegments[1];
 
-            yield return new(moduleId, moduleVersion);
+            def = new(moduleId, moduleVersion);
+            return _allowedModuleIds.Contains(moduleId);
         }
     }
 
-    private readonly record struct ModuleDef(string ModuleId, string ModuleVersion);
+    private readonly record struct ModuleDef(string ModuleId, string ModuleVersion)
+    {
+        public static ModuleDef Empty => default;
+    }
 }
