@@ -1,19 +1,37 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Bannerlord.BUTRModule.Sdk/1.1.0.129">
 
-  <PropertyGroup>
-    <Version>1.3.0</Version>
-    <TargetFramework>net472</TargetFramework>
-    <Platforms>x64</Platforms>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <ModuleId>$(MSBuildProjectName)</ModuleId>
-    <ModuleName>Butter Achievements</ModuleName>
-    <GameFolder>C:\Games\Steam\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
-  </PropertyGroup>
+	<PropertyGroup>
+		<Version>1.3.9</Version>
+		<TargetFrameworks>net472;net8</TargetFrameworks>
+		<Platforms>x64</Platforms>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
 
-  <ItemGroup>
-    <PackageReference Include="Bannerlord.BuildResources" Version="1.1.0.129" PrivateAssets="all" />
-    <PackageReference Include="Bannerlord.ReferenceAssemblies" Version="1.3.0.89661-beta" />
-    <PackageReference Include="Lib.Harmony" Version="2.3.6" IncludeAssets="compile" />
-  </ItemGroup>
+		<BuildForWindows>false</BuildForWindows>
+		<BuildForWindowsStore>false</BuildForWindowsStore>
+
+		<ModuleId>$(MSBuildProjectName)</ModuleId>
+		<ModuleName>Butter Achievements</ModuleName>
+		<ModuleUrl>https://github.com/jzebedee/ButterAchievements</ModuleUrl>
+		<GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
+		<!-- Module manually override GameVersion -->
+		<!--<OverrideGameVersion>v1.3.9</OverrideGameVersion>-->
+		<!--<DisableReferenceAssemblies>true</DisableReferenceAssemblies>-->
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(TargetFramework) == 'net472'">
+		<!-- Steam/GOG/Epic versions of the game -->
+		<BuildForWindows>true</BuildForWindows>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(TargetFramework) == 'net8'">
+		<!-- Xbox Game Pass PC version of the game -->
+		<BuildForWindowsStore>true</BuildForWindowsStore>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<EnableWindowsTargeting>true</EnableWindowsTargeting>
+	</PropertyGroup>
+
+	<!-- Development Variables -->
+	<PropertyGroup>
+		<HarmonyVersion>2.3.6</HarmonyVersion>
+	</PropertyGroup>
 </Project>
